@@ -1,0 +1,33 @@
+# Diretórios de build
+bin/
+obj/
+
+# Configurações de IDEs
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Resultados de build
+*.dll
+*.exe
+*.app
+*.log
+
+# Pacotes NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos locais / banco de dados
+*.db
+*.sdf
+*.sqlite
+
+# Arquivos de preferências
+*.userprefs
