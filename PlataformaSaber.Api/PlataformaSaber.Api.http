@@ -1,6 +1,0 @@
-@PlataformaSaber.Api_HostAddress = http://localhost:5230
-
-GET {{PlataformaSaber.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
