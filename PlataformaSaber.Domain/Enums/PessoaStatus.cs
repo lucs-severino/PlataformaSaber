@@ -1,4 +1,4 @@
-public enum UsuarioStatus
+public enum PessoaStatus
 {
     Ativo,
     Desativado
