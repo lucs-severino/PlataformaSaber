@@ -20,6 +20,7 @@ public abstract class Pessoa
         Cpf = cpf ?? throw new ArgumentNullException(nameof(cpf));
         DataNascimento = dataNascimento;
         Status = PessoaStatus.Ativo;
+        Tipo = tipo;
     }
 
     public void AtualizarDados(string nome, string email)
