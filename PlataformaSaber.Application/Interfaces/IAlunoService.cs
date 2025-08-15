@@ -1,15 +1,10 @@
-// IAlunoService.cs
-
 using System.Threading.Tasks;
+using PlataformaSaber.Application.DTOs;
 
 namespace PlataformaSaber.Application.Interfaces
 {
-    public interface IAlunoService
+    public interface IAlunoService : IService<AlunoDto>
     {
-        Task<AlunoDto> GetAlunoByIdAsync(int id);
-        Task<IEnumerable<AlunoDto>> GetAllAlunosAsync();
-        Task AddAlunoAsync(AlunoDto aluno);
-        Task UpdateAlunoAsync(AlunoDto aluno);
-        Task DeleteAlunoAsync(int id);
+        Task<AlunoDto?> AutenticarAsync(string email, string senha);
     }
 }
