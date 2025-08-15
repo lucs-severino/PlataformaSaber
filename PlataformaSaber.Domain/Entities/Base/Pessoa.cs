@@ -8,9 +8,10 @@ public abstract class Pessoa
     public DateTime DataCadastro { get; protected set; }
     public DateTime? DataNascimento { get; private set; }
     public PessoaStatus Status { get; private set; }
+    public TipoPessoa Tipo { get; private set; }
 
 
-    public Pessoa(string nome, string email, string senhaHash, string cpf, DateTime? dataNascimento)
+    public Pessoa(string nome, string email, string senhaHash, string cpf, DateTime? dataNascimento, TipoPessoa Tipo)
     {
         Id = Guid.NewGuid(); ;
         Nome = nome ?? throw new ArgumentNullException(nameof(nome));
@@ -20,6 +21,7 @@ public abstract class Pessoa
         Cpf = cpf ?? throw new ArgumentNullException(nameof(cpf));
         DataNascimento = dataNascimento;
         Status = PessoaStatus.Ativo;
+        Tipo = tipo;
     }
 
     public void AtualizarDados(string nome, string email)
@@ -36,6 +38,13 @@ public abstract class Pessoa
     public void AtualizarStatus(PessoaStatus status)
     {
         Status = status;
+    }
+
+    public enum TipoPessoa
+    {
+        Aluno,
+        Professor,
+        Administrador
     }
 
 }
