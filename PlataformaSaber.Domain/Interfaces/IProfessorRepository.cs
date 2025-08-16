@@ -1,4 +1,4 @@
-public interface IProfessorRepository : IRepository<Professor>
+public interface IProfessorRepository : IPessoaRepository<Professor>
 {
 
 }

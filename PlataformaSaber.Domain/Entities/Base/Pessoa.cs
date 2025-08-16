@@ -8,18 +8,18 @@ public abstract class Pessoa
     public Password Senha { get; private set; }
     public DateTime DataCadastro { get; protected set; }
     public DateTime? DataNascimento { get; private set; }
-    public PessoaStatus Status { get; private set; }
+    public PessoaStatus? Status { get; private set; }
 
     protected Pessoa() { }
 
     public Pessoa(string nome, string email, string senha, string cpf, DateTime? dataNascimento)
     {
         Id = Guid.NewGuid(); ;
-        Nome = ValidarNome (nome);
+        Nome = ValidarNome(nome);
         Email = ValidarEmail(email);
         Senha = Password.Create(senha);
         DataCadastro = DateTime.UtcNow;
-        Cpf = cpf ?? throw new ArgumentNullException(nameof(cpf));
+        Cpf = ValidarCpf(cpf);
         DataNascimento = dataNascimento;
         Status = PessoaStatus.Ativo;
     }
@@ -65,4 +65,16 @@ public abstract class Pessoa
         return nome;
     }
 
+    private string ValidarCpf(string cpf)
+    {
+        if (string.IsNullOrWhiteSpace(cpf))
+            throw new ArgumentNullException(nameof(cpf), "O CPF não pode ser vazio.");
+        if (cpf.Length != 11)
+            throw new ArgumentException("CPF deve ter 11 dígitos.", nameof(cpf));
+        return cpf;
+    }
+    
 }
+
+
+

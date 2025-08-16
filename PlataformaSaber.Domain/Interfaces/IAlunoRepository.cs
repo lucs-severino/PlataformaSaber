@@ -1,4 +1,4 @@
-public interface IAlunoRepository : IRepository<Aluno>
+public interface IAlunoRepository : IPessoaRepository<Aluno>
 {
  
 }

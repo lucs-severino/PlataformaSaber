@@ -1,4 +1,4 @@
-public class ProfessorService : Service<ProfessorDto, Professor>, IProfessorService
+public class ProfessorService : PessoaService<ProfessorDto, Professor>, IProfessorService
 {
     private readonly IProfessorRepository _ProfessorRepository;
 

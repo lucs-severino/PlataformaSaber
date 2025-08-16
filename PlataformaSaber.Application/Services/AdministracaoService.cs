@@ -1,4 +1,6 @@
-public class AdministracaoService : Service<AdministracaoDto, Administracao>, IAdministracaoService
+using System.Linq.Expressions;
+
+public class AdministracaoService : PessoaService<AdministracaoDto, Administracao>, IAdministracaoService
 {
     private readonly IAdministracaoRepository _AdministracaoRepository;
 
@@ -24,5 +26,6 @@ public class AdministracaoService : Service<AdministracaoDto, Administracao>, IA
             Status = Administracao.Status.ToString()
         };
     }
+
 }
 

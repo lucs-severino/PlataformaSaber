@@ -8,7 +8,7 @@ public static class DependencyInjectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IPessoaRepository<>), typeof(PessoaRepository<>));
         services.AddScoped<IAlunoRepository, AlunoRepository>();
         services.AddScoped<IProfessorRepository,ProfessorRepository>();
         services.AddScoped<IAdministracaoRepository, AdministracaoRepository>();

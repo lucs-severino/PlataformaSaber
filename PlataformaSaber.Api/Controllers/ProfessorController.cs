@@ -4,50 +4,65 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 public class ProfessorController : ControllerBase
 {
-    private readonly IProfessorService _ProfessorService;
+    private readonly IProfessorService _professorService;
 
     public ProfessorController(IProfessorService ProfessorService)
     {
-        _ProfessorService = ProfessorService;
+        _professorService = ProfessorService;
     }
 
     [HttpGet]
     public async Task<IActionResult> ObterTodos()
     {
-        var Professors = await _ProfessorService.ObterTodosAsync();
+        var Professors = await _professorService.ObterTodosAsync();
         return Ok(Professors);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> ObterPorId(Guid id)
     {
-        var Professor = await _ProfessorService.ObterPorIdAsync(id);
+        var Professor = await _professorService.ObterPorIdAsync(id);
         if (Professor == null) return NotFound();
         return Ok(Professor);
     }
 
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Atualizar(Guid id, [FromBody] ProfessorDto ProfessorDto)
+    public async Task<IActionResult> Atualizar(Guid id, [FromBody] ProfessorDto professorDto)
     {
-        if (id != ProfessorDto.Id)
+        if (id != professorDto.Id)
             return BadRequest("IDs não coincidem.");
 
-        await _ProfessorService.AtualizarAsync(ProfessorDto);
+
+        var verificarProfessor = await _professorService.BuscarAsync(p => p.Id == professorDto.Id);
+        if (!verificarProfessor.Any())
+            return NotFound($"Professor com ID {professorDto.Id} não encontrado.");
+
+        await _professorService.AtualizarAsync(professorDto);
         return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Remover(Guid id)
     {
-        await _ProfessorService.RemoverAsync(id);
+        await _professorService.RemoverAsync(id);
         return NoContent();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Adicionar([FromBody] ProfessorDto ProfessorDto)
+    public async Task<IActionResult> Adicionar([FromBody] ProfessorDto professorDto)
     {
-        await _ProfessorService.AdicionarAsync(ProfessorDto);
+        var cpfExistente = await _professorService.BuscarAsync(p => p.Cpf == professorDto.Cpf);
+
+        if (cpfExistente.Any())
+            return BadRequest($"Já existe uma pessoa cadastrada com o CPF {professorDto.Cpf}.");
+
+        var emailExistente = await _professorService.BuscarAsync(p => p.Email == professorDto.Email);
+
+        if (emailExistente.Any())
+            return BadRequest($"Já existe uma pessoa cadastrada com o Email {professorDto.Email}.");
+
+        await _professorService.AdicionarAsync(professorDto);
         return NoContent();
     }
 }

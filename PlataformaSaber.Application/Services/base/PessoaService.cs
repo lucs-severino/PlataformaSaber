@@ -1,10 +1,12 @@
 
-public abstract class Service<TDto, TEntity> : IService<TDto>
+using System.Linq.Expressions;
+
+public abstract class PessoaService<TDto, TEntity> : IPessoaService<TDto, TEntity> //'PessoaService<TDto, TEntity>' does not implement interface member 'IPessoaService<TDto, TEntity>.BuscarAsync(Expression<Func<TDto, bool>>)'CS0535
     where TEntity : class
 {
-    protected readonly IRepository<TEntity> _repository;
+    protected readonly IPessoaRepository<TEntity> _repository;
 
-    protected Service(IRepository<TEntity> repository)
+    protected PessoaService(IPessoaRepository<TEntity> repository)
     {
         _repository = repository;
     }
@@ -18,7 +20,7 @@ public abstract class Service<TDto, TEntity> : IService<TDto>
         return list.Select(MapToDto);
     }
 
-    public virtual  async Task<TDto?> ObterPorIdAsync(Guid id)
+    public virtual async Task<TDto?> ObterPorIdAsync(Guid id)
     {
         var entity = await _repository.ObterPorIdAsync(id);
         return entity == null ? default : MapToDto(entity);
@@ -27,6 +29,7 @@ public abstract class Service<TDto, TEntity> : IService<TDto>
     public virtual async Task AdicionarAsync(TDto dto)
     {
         var entity = MapToEntity(dto);
+
         await _repository.AdicionarAsync(entity);
     }
 
@@ -42,5 +45,11 @@ public abstract class Service<TDto, TEntity> : IService<TDto>
         if (entity != null)
             await _repository.RemoverAsync(entity);
     }
-}
 
+    public virtual async Task<IEnumerable<TDto>> BuscarAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        var entities = await _repository.BuscarAsync(predicate);
+        return entities.Select(MapToDto);
+    }
+
+}

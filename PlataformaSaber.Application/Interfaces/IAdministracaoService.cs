@@ -1,5 +1,5 @@
 
-public interface IAdministracaoService : IService<AdministracaoDto>
+public interface IAdministracaoService : IPessoaService<AdministracaoDto, Administracao>
 {
 }
 

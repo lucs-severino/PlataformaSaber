@@ -34,7 +34,11 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
         builder.Property(p => p.DataNascimento);
 
         builder.Property(p => p.Status)
-            .IsRequired();
-
+            .IsRequired()
+            .HasConversion(
+                v => v.ToString(), // Enum -> string
+                v => (PessoaStatus)Enum.Parse(typeof(PessoaStatus), v)
+            )
+            .HasMaxLength(15); 
     }
 }

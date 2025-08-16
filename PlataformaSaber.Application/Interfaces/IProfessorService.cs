@@ -1,5 +1,5 @@
 
-public interface IProfessorService : IService<ProfessorDto>
+public interface IProfessorService : IPessoaService<ProfessorDto, Professor>
 {
 }
 

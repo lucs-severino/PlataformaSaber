@@ -1,4 +1,4 @@
-public interface IAdministracaoRepository : IRepository<Administracao>
+public interface IAdministracaoRepository : IPessoaRepository<Administracao>
 {
 
 }

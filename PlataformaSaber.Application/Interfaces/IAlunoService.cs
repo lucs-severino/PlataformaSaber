@@ -1,5 +1,5 @@
 
-public interface IAlunoService : IService<AlunoDto>
+public interface IAlunoService : IPessoaService<AlunoDto, Aluno>
 {
 }
 

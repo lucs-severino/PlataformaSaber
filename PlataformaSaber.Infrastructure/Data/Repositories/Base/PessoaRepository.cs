@@ -1,11 +1,13 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-public class Repository<T> : IRepository<T> where T : class
+public class PessoaRepository<T> : IPessoaRepository<T> where T : Pessoa
+
 {
     protected readonly ApplicationDbContext _context;
     protected readonly DbSet<T> _dbSet;
 
-    public Repository(ApplicationDbContext context)
+    public PessoaRepository(ApplicationDbContext context)
     {
         _context = context;
         _dbSet = _context.Set<T>();
@@ -22,6 +24,7 @@ public class Repository<T> : IRepository<T> where T : class
         catch (Exception ex)
         {
             Console.WriteLine($"Erro ao Adicionar entidade do tipo {typeof(T).Name}: {ex.Message}");
+            // 
             throw;
         }
     }
@@ -44,7 +47,7 @@ public class Repository<T> : IRepository<T> where T : class
         try
         {
             _dbSet.Update(entity);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -68,8 +71,8 @@ public class Repository<T> : IRepository<T> where T : class
         }
     }
 
-    // Buscar com filtro (opcional)
-    public async Task<IEnumerable<T>> BuscarAsync(Func<T, bool> predicate)
+    // Busca por filtros
+    public async Task<IEnumerable<T>> BuscarAsync(Expression<Func<T, bool>> predicate)
     {
         return await Task.FromResult(_dbSet.AsQueryable().Where(predicate));
     }

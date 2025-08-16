@@ -1,4 +1,4 @@
-public class AlunoService : Service<AlunoDto, Aluno>, IAlunoService
+public class AlunoService : PessoaService<AlunoDto, Aluno>, IAlunoService
 {
     private readonly IAlunoRepository _alunoRepository;
 
