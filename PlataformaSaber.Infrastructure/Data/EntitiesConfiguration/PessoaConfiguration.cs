@@ -16,8 +16,13 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
             .IsRequired()
             .HasMaxLength(150);
 
-        builder.Property(p => p.SenhaHash)
-            .IsRequired();
+        builder.Property(p => p.Senha)
+            .HasConversion(
+                pw => pw.Hash,
+                hash => Password.CreateFromHash(hash)
+            )
+            .IsRequired()
+            .HasColumnName("SenhaHash");
 
         builder.Property(p => p.Cpf)
             .IsRequired()
@@ -30,11 +35,6 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
 
         builder.Property(p => p.Status)
             .IsRequired();
-
-
-        builder.HasDiscriminator<string>("TipoPessoa")
-            .HasValue<Pessoa>("Pessoa")
-            .HasValue<Aluno>("Aluno");
 
     }
 }

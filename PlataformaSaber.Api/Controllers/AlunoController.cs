@@ -43,5 +43,13 @@ public class AlunoController : ControllerBase
         await _alunoService.RemoverAsync(id);
         return NoContent();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Adicionar([FromBody] AlunoDto alunoDto)
+    {
+        await _alunoService.AdicionarAsync(alunoDto);
+        return NoContent();
+    }
 }
+
 

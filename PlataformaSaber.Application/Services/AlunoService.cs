@@ -9,7 +9,7 @@ public class AlunoService : Service<AlunoDto, Aluno>, IAlunoService
 
     public override Aluno MapToEntity(AlunoDto dto)
     {
-        return new Aluno(dto.Nome, dto.Email, "HASH-AQUI", dto.Cpf, dto.DataNascimento);
+        return new Aluno(dto.Nome, dto.Email, "123456789", dto.Cpf, dto.DataNascimento);
     }
 
     public override AlunoDto MapToDto(Aluno aluno)
