@@ -5,6 +5,7 @@ public static class DependencyInjectionExtensions
     {
         services.AddScoped<IAlunoService, AlunoService>();
         services.AddScoped<IProfessorService, ProfessorService>();
+        services.AddScoped<IAdministracaoService, AdministracaoService>();
 
         return services;
     }

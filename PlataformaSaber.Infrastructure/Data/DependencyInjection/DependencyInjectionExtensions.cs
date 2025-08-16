@@ -11,6 +11,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IAlunoRepository, AlunoRepository>();
         services.AddScoped<IProfessorRepository,ProfessorRepository>();
+        services.AddScoped<IAdministracaoRepository, AdministracaoRepository>();
 
         return services;
     }
