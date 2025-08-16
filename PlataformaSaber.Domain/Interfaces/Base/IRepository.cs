@@ -5,4 +5,6 @@ public interface IRepository<T> where T : class
     Task AdicionarAsync(T entity);
     Task AtualizarAsync(T entity);
     Task RemoverAsync(T entity);
+
+    
 }

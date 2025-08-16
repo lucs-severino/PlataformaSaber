@@ -7,7 +7,8 @@ public class AlunoService : Service<AlunoDto, Aluno>, IAlunoService
         _alunoRepository = alunoRepository;
     }
 
-    public override Aluno MapToEntity(AlunoDto dto)
+ 
+      public override Aluno MapToEntity(AlunoDto dto)
     {
         return new Aluno(dto.Nome, dto.Email, "123456789", dto.Cpf, dto.DataNascimento);
     }
