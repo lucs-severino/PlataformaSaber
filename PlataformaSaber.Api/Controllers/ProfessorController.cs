@@ -52,7 +52,7 @@ public class ProfessorController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Adicionar([FromBody] ProfessorDto professorDto)
     {
-        var cpfExistente = await _professorService.BuscarAsync(p => p.Cpf == professorDto.Cpf);
+        var cpfExistente = await _professorService.BuscarAsync(p => p.Cpf == professorDto.Cpf); 
 
         if (cpfExistente.Any())
             return BadRequest($"Já existe uma pessoa cadastrada com o CPF {professorDto.Cpf}.");

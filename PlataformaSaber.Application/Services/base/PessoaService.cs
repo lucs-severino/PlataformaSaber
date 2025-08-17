@@ -1,7 +1,7 @@
 
 using System.Linq.Expressions;
 
-public abstract class PessoaService<TDto, TEntity> : IPessoaService<TDto, TEntity> //'PessoaService<TDto, TEntity>' does not implement interface member 'IPessoaService<TDto, TEntity>.BuscarAsync(Expression<Func<TDto, bool>>)'CS0535
+public abstract class PessoaService<TDto, TEntity> : IPessoaService<TDto, TEntity>
     where TEntity : class
 {
     protected readonly IPessoaRepository<TEntity> _repository;
