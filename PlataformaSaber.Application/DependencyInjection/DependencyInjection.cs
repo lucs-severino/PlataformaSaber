@@ -8,6 +8,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IAdministracaoService, AdministracaoService>();
         services.AddScoped<IUsuarioService, UsuarioService>();
 
+        services.AddScoped<AuthAppService>();
         return services;
     }
 }

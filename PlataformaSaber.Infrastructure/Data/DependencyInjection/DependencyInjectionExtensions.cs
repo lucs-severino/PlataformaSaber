@@ -13,6 +13,9 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IProfessorRepository,ProfessorRepository>();
         services.AddScoped<IAdministracaoRepository, AdministracaoRepository>();
 
+
+        services.AddScoped<IUserAuthentication, JwtAuthService>();
+
         return services;
     }
 }

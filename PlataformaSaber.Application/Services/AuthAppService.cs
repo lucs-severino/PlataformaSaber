@@ -1,8 +1,8 @@
 public class AuthAppService
 {
-    private readonly IAuthService _authService;
+    private readonly IUserAuthentication _authService;
 
-    public AuthAppService(IAuthService authService)
+    public AuthAppService(IUserAuthentication authService)
     {
         _authService = authService;
     }

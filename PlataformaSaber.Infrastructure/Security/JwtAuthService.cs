@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-public class JwtAuthService : IAuthService
+public class JwtAuthService : IUserAuthentication
 {
     private readonly IConfiguration _config;
     private readonly IPessoaRepository<Pessoa> _pessoaRepository;
