@@ -60,6 +60,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()    
+              .AllowAnyHeader()    
+              .AllowAnyMethod();
+});
+
 // Injeção de dependências por camada
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -74,6 +84,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 // 🔑 Ordem importa: primeiro autenticação, depois autorização
 app.UseAuthentication();

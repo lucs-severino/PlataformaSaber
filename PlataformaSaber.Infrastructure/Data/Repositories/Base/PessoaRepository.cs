@@ -76,4 +76,17 @@ public class PessoaRepository<T> : IPessoaRepository<T> where T : Pessoa
     {
         return await Task.FromResult(_dbSet.AsQueryable().Where(predicate));
     }
+
+    // Obter entidades paginadas
+    public async Task<IEnumerable<T>> ObterPaginadoAsync(int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _dbSet.Skip(skip).Take(pageSize).ToListAsync();
+    }
+
+    public async Task<int> ContarTodosAsync()
+    {
+        return await _dbSet.CountAsync();
+    }
+
 }

@@ -49,4 +49,30 @@ public class UsuarioService : IUsuarioService
             }
         };
     }
+
+    public async Task<object> ObterTodasPessoasPaginadasAsync(int page)
+    {
+
+        var totalItens = await _pessoaRepository.ContarTodosAsync();
+
+        var pageSize = 10; 
+        var totalPaginas = (int)Math.Ceiling((double)totalItens / pageSize);
+
+        var pessoas = await _pessoaRepository.ObterPaginadoAsync(page, pageSize);
+
+
+        var itemsDto = pessoas.Select(MapToDto);
+
+        return new
+        {
+            usuarios = new
+            {
+                itemsReceived = itemsDto.Count(),
+                curPage = page,
+                itemsTotal = totalItens,
+                pageTotal = totalPaginas,
+                items = itemsDto
+            }
+        };
+    }
 }

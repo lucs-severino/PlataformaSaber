@@ -14,9 +14,9 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObterTodasPessoas()
+    public async Task<IActionResult> ObterTodasPessoas([FromQuery] int page = 1)
     {
-        var pessoas = await _usuarioService.ObterTodasPessoasAsync();
+        var pessoas = await _usuarioService.ObterTodasPessoasPaginadasAsync(page);
         return Ok(pessoas);
     }
 

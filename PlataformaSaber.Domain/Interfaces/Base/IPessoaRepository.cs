@@ -8,5 +8,7 @@ public interface IPessoaRepository<T> where T : class
     Task AtualizarAsync(T entity);
     Task RemoverAsync(T entity);
     Task<IEnumerable<T>> BuscarAsync(Expression<Func<T, bool>> predicate);
+    Task<IEnumerable<T>> ObterPaginadoAsync(int pageNumber, int pageSize);
+    Task<int> ContarTodosAsync();
 
 }
