@@ -2,13 +2,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
-public class UsuarioController : ControllerBase
+public class UsuariosController : ControllerBase
 {
     private readonly IUsuarioService _usuarioService;
 
-    public UsuarioController(IUsuarioService usuarioService)
+    public UsuariosController(IUsuarioService usuarioService)
     {
         _usuarioService = usuarioService;
     }

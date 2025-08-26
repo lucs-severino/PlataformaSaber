@@ -65,11 +65,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()    
-              .AllowAnyHeader()    
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
               .AllowAnyMethod();
+    });
 });
-
 // Injeção de dependências por camada
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
