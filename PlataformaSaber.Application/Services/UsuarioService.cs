@@ -86,14 +86,31 @@ public class UsuarioService : IUsuarioService
         };
     }
 
-    public async Task AlterarUsuarioAsync(UsuarioDto dto)
+    public async Task<UsuarioDto?> BuscarUsuarioPorId(Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return null;
+        }
+
+        var pessoasEncontradas = await _pessoaRepository.BuscarAsync(p => p.Id == id);
+        var pessoa = pessoasEncontradas.FirstOrDefault();
+
+        if (pessoa != null)
+        {
+            return MapToDto(pessoa);
+        }
+        return null;
+    }
+
+    public async Task AlterarUsuarioAsync(UsuarioDto dto , Guid id)
     {
         switch (dto.TipoPessoa)
         {
             case "Professor":
                 await _professorService.AtualizarAsync(new ProfessorDto
                 {
-                    Id = dto.Id,
+                    Id = id,
                     Nome = dto.Nome,
                     Email = dto.Email,
                     Cpf = dto.Cpf,
@@ -105,7 +122,7 @@ public class UsuarioService : IUsuarioService
             case "Administracao":
                 await _administracaoService.AtualizarAsync(new AdministracaoDto
                 {
-                    Id = dto.Id,
+                    Id = id,
                     Nome = dto.Nome,
                     Email = dto.Email,
                     Cpf = dto.Cpf,
@@ -117,7 +134,7 @@ public class UsuarioService : IUsuarioService
             case "Aluno":
                 await _alunoService.AtualizarAsync(new AlunoDto
                 {
-                    Id = dto.Id,
+                    Id = id,
                     Nome = dto.Nome,
                     Email = dto.Email,
                     Cpf = dto.Cpf,

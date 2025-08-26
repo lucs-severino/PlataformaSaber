@@ -26,15 +26,34 @@ public class UsuariosController : ControllerBase
         return Ok(pessoas);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUsuarioPorId(string id)
+    {
+        if (!Guid.TryParse(id, out Guid guidId))
+        {
+            return BadRequest("O ID fornecido não é um GUID válido.");
+        }
+
+        var usuario = await _usuarioService.BuscarUsuarioPorId(guidId);
+
+        if (usuario == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(usuario);
+    }
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> AlterarUsuario(Guid id, [FromBody] UsuarioDto dto)
     {
-        if (id == Guid.Empty || dto == null || id != dto.Id)
+        if (id == Guid.Empty || dto == null)
             return BadRequest("ID inválido ou dados do usuário não fornecidos.");
 
-        await _usuarioService.AlterarUsuarioAsync(dto);
+        await _usuarioService.AlterarUsuarioAsync(dto, id);
 
         return NoContent();
     }
+
 
 }
