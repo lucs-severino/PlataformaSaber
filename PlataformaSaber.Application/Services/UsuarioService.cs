@@ -1,10 +1,20 @@
 public class UsuarioService : IUsuarioService
 {
     private readonly IPessoaRepository<Pessoa> _pessoaRepository;
+    private readonly IProfessorService _professorService;
+    private readonly IAdministracaoService _administracaoService;
+    private readonly IAlunoService _alunoService;
 
-    public UsuarioService(IPessoaRepository<Pessoa> pessoaRepository)
+    public UsuarioService(
+        IPessoaRepository<Pessoa> pessoaRepository,
+        IProfessorService professorService,
+        IAlunoService alunoService,
+        IAdministracaoService administracaoService)
     {
         _pessoaRepository = pessoaRepository;
+        _professorService = professorService;
+        _administracaoService = administracaoService;
+        _alunoService = alunoService;
     }
 
     public async Task<IEnumerable<UsuarioDto>> ObterTodasPessoasAsync()
@@ -55,7 +65,7 @@ public class UsuarioService : IUsuarioService
 
         var totalItens = await _pessoaRepository.ContarTodosAsync();
 
-        var pageSize = 10; 
+        var pageSize = 10;
         var totalPaginas = (int)Math.Ceiling((double)totalItens / pageSize);
 
         var pessoas = await _pessoaRepository.ObterPaginadoAsync(page, pageSize);
@@ -75,4 +85,50 @@ public class UsuarioService : IUsuarioService
             }
         };
     }
+
+    public async Task AlterarUsuarioAsync(UsuarioDto dto)
+    {
+        switch (dto.TipoPessoa)
+        {
+            case "Professor":
+                await _professorService.AtualizarAsync(new ProfessorDto
+                {
+                    Id = dto.Id,
+                    Nome = dto.Nome,
+                    Email = dto.Email,
+                    Cpf = dto.Cpf,
+                    DataNascimento = dto.DataNascimento,
+                    Status = dto.Status
+                });
+                break;
+
+            case "Administracao":
+                await _administracaoService.AtualizarAsync(new AdministracaoDto
+                {
+                    Id = dto.Id,
+                    Nome = dto.Nome,
+                    Email = dto.Email,
+                    Cpf = dto.Cpf,
+                    DataNascimento = dto.DataNascimento,
+                    Status = dto.Status
+                });
+                break;
+
+            case "Aluno":
+                await _alunoService.AtualizarAsync(new AlunoDto
+                {
+                    Id = dto.Id,
+                    Nome = dto.Nome,
+                    Email = dto.Email,
+                    Cpf = dto.Cpf,
+                    DataNascimento = dto.DataNascimento,
+                    Status = dto.Status
+                });
+                break;
+
+            default:
+                throw new ArgumentException("Tipo de pessoa inválido.");
+        }
+    }
+
 }

@@ -1,12 +1,10 @@
 public class AlunoService : PessoaService<AlunoDto, Aluno>, IAlunoService
 {
     private readonly IAlunoRepository _alunoRepository;
-    private readonly IUsuarioService _usuarioService;
 
-    public AlunoService(IAlunoRepository alunoRepository, IUsuarioService usuarioService) : base(alunoRepository)
+    public AlunoService(IAlunoRepository alunoRepository) : base(alunoRepository)
     {
         _alunoRepository = alunoRepository;
-        _usuarioService = usuarioService;
     }
 
 
@@ -28,14 +26,5 @@ public class AlunoService : PessoaService<AlunoDto, Aluno>, IAlunoService
         };
     }
 
-    public override async Task AdicionarAsync(AlunoDto dto)
-    {
-        var jaExisteUsuario = await _usuarioService.BuscarPessoasAsync(dto.Email, dto.Cpf);
-
-        if (jaExisteUsuario.Any())
-            throw new InvalidOperationException($"Já existe um usuário cadastrado com o email {dto.Email} ou CPF {dto.Cpf}");
-
-        await base.AdicionarAsync(dto);
-    }
 }
 

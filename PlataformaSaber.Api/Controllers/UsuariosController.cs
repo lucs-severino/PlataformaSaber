@@ -25,4 +25,16 @@ public class UsuariosController : ControllerBase
         var pessoas = await _usuarioService.BuscarPessoasAsync(email, tipo);
         return Ok(pessoas);
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> AlterarUsuario(Guid id, [FromBody] UsuarioDto dto)
+    {
+        if (id == Guid.Empty || dto == null || id != dto.Id)
+            return BadRequest("ID inválido ou dados do usuário não fornecidos.");
+
+        await _usuarioService.AlterarUsuarioAsync(dto);
+
+        return NoContent();
+    }
+
 }

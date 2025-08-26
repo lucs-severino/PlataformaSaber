@@ -2,12 +2,9 @@ public class ProfessorService : PessoaService<ProfessorDto, Professor>, IProfess
 {
     private readonly IProfessorRepository _ProfessorRepository;
 
-    private readonly IUsuarioService _usuarioService;
-
-    public ProfessorService(IProfessorRepository ProfessorRepository, IUsuarioService usuarioService) : base(ProfessorRepository)
+    public ProfessorService(IProfessorRepository ProfessorRepository) : base(ProfessorRepository)
     {
         _ProfessorRepository = ProfessorRepository;
-        _usuarioService = usuarioService;
     }
 
     public override Professor MapToEntity(ProfessorDto dto)
@@ -26,16 +23,6 @@ public class ProfessorService : PessoaService<ProfessorDto, Professor>, IProfess
             DataNascimento = Professor.DataNascimento,
             Status = Professor.Status.ToString()
         };
-    }
-
-    public override async Task AdicionarAsync(ProfessorDto dto)
-    {
-        var jaExisteUsuario = await _usuarioService.BuscarPessoasAsync(dto.Email, dto.Cpf);
-
-        if (jaExisteUsuario.Any())
-            throw new InvalidOperationException($"Já existe um usuário cadastrado com o email {dto.Email} ou CPF {dto.Cpf}");
-
-        await base.AdicionarAsync(dto);
     }
 }
 
