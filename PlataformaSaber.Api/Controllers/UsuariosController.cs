@@ -52,7 +52,7 @@ public class UsuariosController : ControllerBase
 
         await _usuarioService.AlterarUsuarioAsync(dto, id);
 
-        return NoContent();
+        return Ok(dto);
     }
 
 

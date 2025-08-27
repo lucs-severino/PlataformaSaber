@@ -103,48 +103,30 @@ public class UsuarioService : IUsuarioService
         return null;
     }
 
-    public async Task AlterarUsuarioAsync(UsuarioDto dto , Guid id)
+    public async Task AlterarUsuarioAsync(UsuarioDto dto, Guid id)
     {
-        switch (dto.TipoPessoa)
+
+        var pessoas = await _pessoaRepository.BuscarAsync(p => p.Id == id);
+        var pessoa = pessoas.FirstOrDefault();
+
+        if (pessoa is Professor professor)
         {
-            case "Professor":
-                await _professorService.AtualizarAsync(new ProfessorDto
-                {
-                    Id = id,
-                    Nome = dto.Nome,
-                    Email = dto.Email,
-                    Cpf = dto.Cpf,
-                    DataNascimento = dto.DataNascimento,
-                    Status = dto.Status
-                });
-                break;
-
-            case "Administracao":
-                await _administracaoService.AtualizarAsync(new AdministracaoDto
-                {
-                    Id = id,
-                    Nome = dto.Nome,
-                    Email = dto.Email,
-                    Cpf = dto.Cpf,
-                    DataNascimento = dto.DataNascimento,
-                    Status = dto.Status
-                });
-                break;
-
-            case "Aluno":
-                await _alunoService.AtualizarAsync(new AlunoDto
-                {
-                    Id = id,
-                    Nome = dto.Nome,
-                    Email = dto.Email,
-                    Cpf = dto.Cpf,
-                    DataNascimento = dto.DataNascimento,
-                    Status = dto.Status
-                });
-                break;
-
-            default:
-                throw new ArgumentException("Tipo de pessoa inválido.");
+            professor.AtualizarDados(dto.Nome, dto.Email, dto.DataNascimento, dto.Status, dto.Cpf);
+            await _pessoaRepository.AtualizarAsync(professor);
+        }
+        else if (pessoa is Aluno aluno)
+        {
+            aluno.AtualizarDados(dto.Nome, dto.Email, dto.DataNascimento, dto.Status, dto.Cpf);
+            await _pessoaRepository.AtualizarAsync(aluno);
+        }
+        else if (pessoa is Administracao admin)
+        {
+            admin.AtualizarDados(dto.Nome, dto.Email, dto.DataNascimento, dto.Status, dto.Cpf);
+            await _pessoaRepository.AtualizarAsync(admin);
+        }
+        else
+        {
+            throw new InvalidOperationException("Usuário não encontrado ou tipo não suportado.");
         }
     }
 

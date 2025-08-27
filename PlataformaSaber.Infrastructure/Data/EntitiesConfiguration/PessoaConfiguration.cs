@@ -29,9 +29,11 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
             .HasMaxLength(11);
 
         builder.Property(p => p.DataCadastro)
+            .HasColumnType("date")
             .IsRequired();
 
-        builder.Property(p => p.DataNascimento);
+        builder.Property(p => p.DataNascimento)
+               .HasColumnType("date");
 
         builder.Property(p => p.Status)
             .IsRequired()
@@ -39,6 +41,6 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
                 v => v.ToString(), // Enum -> string
                 v => (PessoaStatus)Enum.Parse(typeof(PessoaStatus), v)
             )
-            .HasMaxLength(15); 
+            .HasMaxLength(15);
     }
 }

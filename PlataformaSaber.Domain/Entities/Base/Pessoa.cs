@@ -24,10 +24,27 @@ public abstract class Pessoa
         Status = PessoaStatus.Ativo;
     }
 
-    public void AtualizarDados(string nome, string email)
+    public void AtualizarDados(string nome, string email, DateTime? dataNascimento, string status, string cpf)
     {
         Nome = nome ?? throw new ArgumentNullException(nameof(nome));
         Email = email ?? throw new ArgumentNullException(nameof(email));
+        
+        if (dataNascimento.HasValue && dataNascimento.Value.Kind == DateTimeKind.Unspecified)
+        {
+            DataNascimento = DateTime.SpecifyKind(dataNascimento.Value, DateTimeKind.Utc);
+        }
+        else
+        {
+            DataNascimento = dataNascimento;
+        }
+
+        Status = status switch
+        {
+            "Ativo" => PessoaStatus.Ativo,
+            "Desetivado" => PessoaStatus.Desativado,
+            _ => throw new ArgumentException("Status inválido", nameof(status))
+        };
+        Cpf = ValidarCpf(cpf);
     }
 
     public void AtualizarSenha(string novaSenha)
