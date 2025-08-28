@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsuariosController : ControllerBase
+public class UsuariosController : BaseController
 {
     private readonly IUsuarioService _usuarioService;
 
@@ -15,15 +15,31 @@ public class UsuariosController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> ObterTodasPessoas([FromQuery] int page = 1)
     {
-        var pessoas = await _usuarioService.ObterTodasPessoasPaginadasAsync(page);
-        return Ok(pessoas);
+        try
+        {
+            var pessoas = await _usuarioService.ObterTodasPessoasPaginadasAsync(page);
+            return Ok(pessoas);
+
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
     }
 
     [HttpGet("buscar")]
     public async Task<IActionResult> BuscarPessoas([FromQuery] string? nome, [FromQuery] string? email, [FromQuery] string? tipo)
     {
-        var pessoas = await _usuarioService.BuscarPessoasAsync(email, tipo);
-        return Ok(pessoas);
+        try
+        {
+            var pessoas = await _usuarioService.BuscarPessoasAsync(email, tipo);
+            return Ok(pessoas);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
+
     }
 
     [HttpGet("{id}")]
@@ -33,38 +49,55 @@ public class UsuariosController : ControllerBase
         {
             return BadRequest("O ID fornecido não é um GUID válido.");
         }
-
-        var usuario = await _usuarioService.BuscarUsuarioPorId(guidId);
-
-        if (usuario == null)
+        try
         {
-            return NotFound();
-        }
+            var usuario = await _usuarioService.BuscarUsuarioPorId(guidId);
 
-        return Ok(usuario);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return Ok(usuario);
+
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
     }
+
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> AlterarUsuario(Guid id, [FromBody] UsuarioDto dto)
     {
         if (id == Guid.Empty || dto == null)
             return BadRequest("ID inválido ou dados do usuário não fornecidos.");
-
-        await _usuarioService.AlterarUsuarioAsync(dto, id);
-
-        return Ok(dto);
+        try
+        {
+            await _usuarioService.AlterarUsuarioAsync(dto, id);
+            return Ok(dto);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> CriaUsuario([FromBody] UsuarioDto dto)
     {
-        if (dto == null)
-            return BadRequest("Dados inválido ou dados do usuário não fornecidos.");
+        if (dto is null)
+            return RespostaBadRequest("Dados inválidos ou não fornecidos.");
 
-        await _usuarioService.CriarUsuarioAsync(dto);
-
-        return Ok(dto);
+        try
+        {
+            await _usuarioService.CriarUsuarioAsync(dto);
+            return RespostaSucesso(dto);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
     }
-
 
 }

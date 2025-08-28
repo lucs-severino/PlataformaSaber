@@ -152,6 +152,7 @@ public class UsuarioService : IUsuarioService
             };
 
             await _professorService.AdicionarAsync(professor);
+            return;
         }
         if (dto.TipoPessoa.Equals("Aluno", StringComparison.OrdinalIgnoreCase))
         {
@@ -163,6 +164,7 @@ public class UsuarioService : IUsuarioService
                 DataNascimento = dto.DataNascimento
             };
             await _alunoService.AdicionarAsync(aluno);
+            return;
         }
         if (dto.TipoPessoa.Equals("Administracao", StringComparison.OrdinalIgnoreCase))
         {
@@ -174,6 +176,7 @@ public class UsuarioService : IUsuarioService
                 DataNascimento = dto.DataNascimento
             };
             await _administracaoService.AdicionarAsync(admin);
+            return;
         }
         else
         {
