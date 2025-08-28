@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 public class UsuarioService : IUsuarioService
 {
     private readonly IPessoaRepository<Pessoa> _pessoaRepository;
@@ -127,6 +129,55 @@ public class UsuarioService : IUsuarioService
         else
         {
             throw new InvalidOperationException("Usuário não encontrado ou tipo não suportado.");
+        }
+    }
+
+    public async Task CriarUsuarioAsync(UsuarioDto dto)
+    {
+
+        var existePessoa = (await _pessoaRepository.BuscarAsync(
+                p => p.Cpf == dto.Cpf || p.Email == dto.Email)).FirstOrDefault();
+
+        if (existePessoa != null)
+            throw new InvalidOperationException("Já existe um usuário com o mesmo CPF ou Email.");
+
+        if (dto.TipoPessoa.Equals("Professor", StringComparison.OrdinalIgnoreCase))
+        {
+            var professor = new ProfessorDto
+            {
+                Nome = dto.Nome,
+                Email = dto.Email,
+                Cpf = dto.Cpf,
+                DataNascimento = dto.DataNascimento
+            };
+
+            await _professorService.AdicionarAsync(professor);
+        }
+        if (dto.TipoPessoa.Equals("Aluno", StringComparison.OrdinalIgnoreCase))
+        {
+            var aluno = new AlunoDto
+            {
+                Nome = dto.Nome,
+                Email = dto.Email,
+                Cpf = dto.Cpf,
+                DataNascimento = dto.DataNascimento
+            };
+            await _alunoService.AdicionarAsync(aluno);
+        }
+        if (dto.TipoPessoa.Equals("Administracao", StringComparison.OrdinalIgnoreCase))
+        {
+            var admin = new AdministracaoDto
+            {
+                Nome = dto.Nome,
+                Email = dto.Email,
+                Cpf = dto.Cpf,
+                DataNascimento = dto.DataNascimento
+            };
+            await _administracaoService.AdicionarAsync(admin);
+        }
+        else
+        {
+            throw new InvalidOperationException("Tipo de usuário inválido.");
         }
     }
 

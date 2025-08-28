@@ -55,5 +55,16 @@ public class UsuariosController : ControllerBase
         return Ok(dto);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CriaUsuario([FromBody] UsuarioDto dto)
+    {
+        if (dto == null)
+            return BadRequest("Dados inválido ou dados do usuário não fornecidos.");
+
+        await _usuarioService.CriarUsuarioAsync(dto);
+
+        return Ok(dto);
+    }
+
 
 }

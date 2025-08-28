@@ -6,4 +6,5 @@ public interface IUsuarioService
     Task<object> ObterTodasPessoasPaginadasAsync(int page);
     Task AlterarUsuarioAsync(UsuarioDto dto,Guid id);
     Task<UsuarioDto?> BuscarUsuarioPorId(Guid id);
+    Task CriarUsuarioAsync(UsuarioDto dto);
 }
