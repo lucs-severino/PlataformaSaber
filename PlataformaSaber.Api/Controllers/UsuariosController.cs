@@ -13,11 +13,11 @@ public class UsuariosController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObterTodasPessoas([FromQuery] int page = 1)
+    public async Task<IActionResult> ObterTodasPessoas([FromQuery] int page = 1, [FromQuery] string? nome = null)
     {
         try
         {
-            var pessoas = await _usuarioService.ObterTodasPessoasPaginadasAsync(page);
+            var pessoas = await _usuarioService.ObterTodasPessoasPaginadasAsync(page, nome);
             return Ok(pessoas);
 
         }

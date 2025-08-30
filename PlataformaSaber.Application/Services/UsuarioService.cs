@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Linq.Expressions; 
 
 public class UsuarioService : IUsuarioService
 {
@@ -62,16 +62,28 @@ public class UsuarioService : IUsuarioService
         };
     }
 
-    public async Task<object> ObterTodasPessoasPaginadasAsync(int page)
+    public async Task<object> ObterTodasPessoasPaginadasAsync(int page, string? nome = null)
     {
-
-        var totalItens = await _pessoaRepository.ContarTodosAsync();
-
         var pageSize = 10;
+
+
+        Expression<Func<Pessoa, bool>> predicate = p => true;
+
+        if (!string.IsNullOrWhiteSpace(nome))
+        {
+            predicate = p => p.Nome.ToLower().Contains(nome.ToLower());
+        }
+
+        var totalItens = await _pessoaRepository.ContarFiltradoAsync(predicate);
+
         var totalPaginas = (int)Math.Ceiling((double)totalItens / pageSize);
 
-        var pessoas = await _pessoaRepository.ObterPaginadoAsync(page, pageSize);
+        if (page > totalPaginas && totalPaginas > 0)
+        {
+            page = totalPaginas;
+        }
 
+        var pessoas = await _pessoaRepository.ObterFiltradoEPaginadoAsync(predicate, page, pageSize);
 
         var itemsDto = pessoas.Select(MapToDto);
 

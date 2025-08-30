@@ -74,7 +74,7 @@ public class PessoaRepository<T> : IPessoaRepository<T> where T : Pessoa
     // Busca por filtros
     public async Task<IEnumerable<T>> BuscarAsync(Expression<Func<T, bool>> predicate)
     {
-        return await Task.FromResult(_dbSet.AsQueryable().Where(predicate));
+        return await _dbSet.Where(predicate).ToListAsync();
     }
 
     // Obter entidades paginadas
@@ -89,4 +89,17 @@ public class PessoaRepository<T> : IPessoaRepository<T> where T : Pessoa
         return await _dbSet.CountAsync();
     }
 
+    public async Task<int> ContarFiltradoAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.Where(predicate).CountAsync();
+    }
+
+    public async Task<IEnumerable<T>> ObterFiltradoEPaginadoAsync(Expression<Func<T, bool>> predicate, int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _dbSet.Where(predicate)
+                           .Skip(skip)
+                           .Take(pageSize)
+                           .ToListAsync();
+    }
 }
