@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims; 
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize] 
-public class AgendamentosController : BaseController 
+[Authorize]
+public class AgendamentosController : BaseController
 {
     private readonly IAgendamentoService _agendamentoService;
 
@@ -19,7 +19,7 @@ public class AgendamentosController : BaseController
     {
         if (dto is null)
             return RespostaBadRequest("Dados do agendamento não fornecidos.");
-        
+
         try
         {
             var usuarioLogadoId = ObterUsuarioIdLogado();
@@ -69,11 +69,25 @@ public class AgendamentosController : BaseController
     private Guid ObterUsuarioIdLogado()
     {
         var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        
+
         if (!Guid.TryParse(usuarioIdClaim, out var usuarioLogadoId))
         {
             throw new UnauthorizedAccessException("Token de usuário inválido ou não encontrado.");
         }
         return usuarioLogadoId;
+    }
+    
+    [HttpGet("disponiveis/{professorId:guid}")]
+    public async Task<IActionResult> ObterHorariosDisponiveis(Guid professorId, [FromQuery] DateTime data)
+    {
+        try
+        {
+            var horarios = await _agendamentoService.ObterHorariosDisponiveisAsync(professorId, data);
+            return Ok(horarios);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
     }
 }
