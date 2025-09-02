@@ -57,29 +57,34 @@ public class AgendamentoService : IAgendamentoService
     }
 
     public async Task<HorarioDisponivelDto> ObterHorariosDisponiveisAsync(Guid professorId, DateTime data)
-    {
-        var horariosOcupadosUtc = await _agendamentoRepository.ObterHorariosOcupadosAsync(professorId, data);
+{
+    var horariosOcupadosUtc = await _agendamentoRepository.ObterHorariosOcupadosAsync(professorId, data);
 
-        var horariosBloqueados = new HashSet<DateTime>();
-        foreach (var horarioUtc in horariosOcupadosUtc)
+    var horariosBloqueados = new HashSet<DateTime>();
+    
+    foreach (var horarioUtc in horariosOcupadosUtc)
         {
             var horarioLocal = horarioUtc.ToLocalTime();
+
+            horariosBloqueados.Add(horarioLocal.AddMinutes(-30));
+
             horariosBloqueados.Add(horarioLocal);
+
             horariosBloqueados.Add(horarioLocal.AddMinutes(30));
         }
 
-        var horariosDisponiveis = new HorarioDisponivelDto();
-        var horaInicio = data.Date.AddHours(8);
-        var horaFim = data.Date.AddHours(21);
+    var horariosDisponiveis = new HorarioDisponivelDto();
+    var horaInicio = data.Date.AddHours(8);
+    var horaFim = data.Date.AddHours(21);
 
-        for (var horario = horaInicio; horario < horaFim; horario = horario.AddMinutes(30))
+    for (var horario = horaInicio; horario < horaFim; horario = horario.AddMinutes(30))
+    {
+        if (!horariosBloqueados.Contains(horario))
         {
-            if (!horariosBloqueados.Contains(horario))
-            {
-                horariosDisponiveis.Horarios.Add(horario.ToString("HH:mm"));
-            }
+            horariosDisponiveis.Horarios.Add(horario.ToString("HH:mm"));
         }
-
-        return horariosDisponiveis;
     }
+
+    return horariosDisponiveis;
+}
 }
