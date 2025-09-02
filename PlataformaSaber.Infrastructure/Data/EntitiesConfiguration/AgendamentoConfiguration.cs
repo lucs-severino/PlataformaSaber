@@ -5,8 +5,23 @@ public class AgendamentoConfiguration : IEntityTypeConfiguration<Agendamento>
 {
     public void Configure(EntityTypeBuilder<Agendamento> builder)
     {
-        builder.ToTable("Agendamentos"); 
+        builder.ToTable("Agendamentos");
         builder.HasKey(a => a.Id);
+
+        builder.Property(a => a.DataHora)
+            .IsRequired()
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
+
+        builder.Property(a => a.DataCriacao)
+            .IsRequired()
+            .HasConversion(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
+
 
         builder.Property(a => a.Status)
             .IsRequired()
@@ -16,19 +31,15 @@ public class AgendamentoConfiguration : IEntityTypeConfiguration<Agendamento>
             );
 
         builder.HasOne(a => a.Aluno)
-            .WithMany() 
-            .HasForeignKey(a => a.AlunoId)
-            .OnDelete(DeleteBehavior.Restrict); 
+            .WithMany()
+            .HasForeignKey(a => a.AlunoId);
 
         builder.HasOne(a => a.Professor)
-            .WithMany() 
-            .HasForeignKey(a => a.ProfessorId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .WithMany()
+            .HasForeignKey(a => a.ProfessorId);
 
-      
         builder.HasMany(a => a.Historico)
             .WithOne(h => h.Agendamento)
-            .HasForeignKey(h => h.AgendamentoId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(h => h.AgendamentoId);
     }
 }

@@ -1,13 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 public class AgendamentoHistoricoConfiguration : IEntityTypeConfiguration<AgendamentoHistorico>
 {
     public void Configure(EntityTypeBuilder<AgendamentoHistorico> builder)
     {
-        builder.ToTable("AgendamentoHistoricos"); 
+        builder.ToTable("AgendamentoHistoricos");
+        
         builder.HasKey(h => h.Id);
 
-        builder.Property(h => h.Motivo).HasMaxLength(500);
+        builder.Property(h => h.DataOcorrencia)
+            .IsRequired();
+
+        builder.Property(h => h.Motivo)
+            .HasMaxLength(500);
 
         builder.Property(h => h.Status)
             .IsRequired()
@@ -18,7 +24,6 @@ public class AgendamentoHistoricoConfiguration : IEntityTypeConfiguration<Agenda
 
         builder.HasOne(h => h.UsuarioResponsavel)
             .WithMany()
-            .HasForeignKey(h => h.UsuarioResponsavelId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(h => h.UsuarioResponsavelId);
     }
 }

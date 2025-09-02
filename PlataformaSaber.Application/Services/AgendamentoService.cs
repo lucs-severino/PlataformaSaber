@@ -1,4 +1,5 @@
-using System.Globalization; 
+using System.Globalization;
+using System.Threading.Tasks;
 
 public class AgendamentoService : IAgendamentoService
 {
@@ -11,8 +12,13 @@ public class AgendamentoService : IAgendamentoService
 
     public async Task CriarAgendamentoAsync(AgendamentoDto dto, Guid usuarioLogadoId)
     {
-
-        if (!DateTime.TryParseExact($"{dto.Data} {dto.Hora}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataHora))
+        
+        if (!DateTime.TryParseExact(
+                $"{dto.Data} {dto.Hora}", 
+                "yyyy-MM-dd HH:mm", 
+                CultureInfo.InvariantCulture, 
+                DateTimeStyles.AssumeUniversal,
+                out var dataHora))
         {
             throw new ArgumentException("Formato de data ou hora inválido.");
         }
@@ -24,8 +30,10 @@ public class AgendamentoService : IAgendamentoService
         }
 
         var novoAgendamento = new Agendamento(dto.AlunoId, dto.ProfessorId, usuarioLogadoId, dataHora);
+
         await _agendamentoRepository.AdicionarAsync(novoAgendamento);
     }
+
     public async Task CancelarAgendamentoAsync(Guid agendamentoId, Guid usuarioLogadoId, string motivo)
     {
         var agendamento = await _agendamentoRepository.ObterPorIdAsync(agendamentoId);
