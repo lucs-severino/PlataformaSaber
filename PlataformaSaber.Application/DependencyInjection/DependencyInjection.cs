@@ -7,6 +7,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IProfessorService, ProfessorService>();
         services.AddScoped<IAdministracaoService, AdministracaoService>();
         services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IAgendamentoService, AgendamentoService>();
 
         services.AddScoped<AuthAppService>();
         return services;

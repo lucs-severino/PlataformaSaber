@@ -5,6 +5,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Aluno> Alunos { get; set; } = null!;
     public DbSet<Professor> Professores { get; set; } = null!;
     public DbSet<Administracao> Administracoes { get; set; } = null!;
+    public DbSet<Agendamento> Agendamentos { get; set; } = null!;
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     { }
@@ -14,5 +16,8 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new PessoaConfiguration());
+
+        modelBuilder.ApplyConfiguration(new AgendamentoConfiguration());
+        modelBuilder.ApplyConfiguration(new AgendamentoHistoricoConfiguration());
     }
 }
