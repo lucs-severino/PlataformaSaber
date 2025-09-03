@@ -48,4 +48,52 @@ public class AgendamentoRepository : IAgendamentoRepository
             .Select(a => a.DataHora)
             .ToListAsync();
     }
+
+    public async Task<Dictionary<AgendamentoStatus, int>> ContarStatusAgendamentosAsync()
+    {
+        return await _context.Agendamentos
+            .GroupBy(a => a.Status)
+            .ToDictionaryAsync(g => g.Key, g => g.Count());
+    }
+
+    public async Task<(IEnumerable<Agendamento> Items, long TotalCount)> ObterAgendamentosPaginadosAsync(
+        int page, int pageSize, string? nome, AgendamentoStatus? status, DateTime? data)
+    {
+        var query = _context.Agendamentos
+            .Include(a => a.Aluno)
+            .Include(a => a.Professor)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(nome))
+        {
+            query = query.Where(a => a.Aluno.Nome.Contains(nome) || a.Professor.Nome.Contains(nome));
+        }
+        if (status.HasValue)
+        {
+            query = query.Where(a => a.Status == status.Value);
+        }
+        if (data.HasValue)
+        {
+            query = query.Where(a => a.DataHora.Date == data.Value.Date);
+        }
+
+        var totalCount = await query.LongCountAsync();
+        var items = await query
+            .OrderByDescending(a => a.DataHora)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
+    public async Task<Agendamento?> ObterDetalhesPorIdAsync(Guid id)
+    {
+        return await _context.Agendamentos
+            .Include(a => a.Aluno)
+            .Include(a => a.Professor)
+            .Include(a => a.Historico)
+                .ThenInclude(h => h.UsuarioResponsavel)
+            .FirstOrDefaultAsync(a => a.Id == id);
+    }
 }
