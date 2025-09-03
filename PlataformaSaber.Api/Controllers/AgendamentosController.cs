@@ -66,17 +66,6 @@ public class AgendamentosController : BaseController
         }
     }
 
-    private Guid ObterUsuarioIdLogado()
-    {
-        var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (!Guid.TryParse(usuarioIdClaim, out var usuarioLogadoId))
-        {
-            throw new UnauthorizedAccessException("Token de usuário inválido ou não encontrado.");
-        }
-        return usuarioLogadoId;
-    }
-    
     [HttpGet("disponiveis/{professorId:guid}")]
     public async Task<IActionResult> ObterHorariosDisponiveis(Guid professorId, [FromQuery] DateTime data)
     {
@@ -89,5 +78,62 @@ public class AgendamentosController : BaseController
         {
             return TratarErro(ex);
         }
+    }
+
+    [HttpGet("dashboard-cards")]
+    public async Task<IActionResult> GetDashboardCards()
+    {
+        try
+        {
+            var result = await _agendamentoService.ObterDadosDashboardCardsAsync();
+            return RespostaSucesso(result);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAgendamentosPaginados([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? nome = null, [FromQuery] string? status = null, [FromQuery] DateTime? data = null)
+    {
+        try
+        {
+            var result = await _agendamentoService.ObterAgendamentosPaginadosAsync(page, pageSize, nome, status, data);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
+    }
+
+    [HttpGet("{id}/detalhes")]
+    public async Task<IActionResult> GetDetalhesAgendamento(Guid id)
+    {
+        try
+        {
+            var result = await _agendamentoService.ObterDetalhesAgendamentoAsync(id);
+            if (result == null)
+            {
+                return NotFound("Agendamento não encontrado.");
+            }
+            return RespostaSucesso(result);
+        }
+        catch (Exception ex)
+        {
+            return TratarErro(ex);
+        }
+    }
+
+    private Guid ObterUsuarioIdLogado()
+    {
+        var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!Guid.TryParse(usuarioIdClaim, out var usuarioLogadoId))
+        {
+            throw new UnauthorizedAccessException("Token de usuário inválido ou não encontrado.");
+        }
+        return usuarioLogadoId;
     }
 }
