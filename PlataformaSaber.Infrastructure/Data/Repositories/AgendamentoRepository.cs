@@ -24,6 +24,19 @@ public class AgendamentoRepository : IAgendamentoRepository
 
     public async Task AtualizarAsync(Agendamento agendamento)
     {
+        _context.ChangeTracker.Clear();
+
+        var entidadeExistente = await _context.Agendamentos
+            .FirstOrDefaultAsync(a => a.Id == agendamento.Id);
+
+        if (entidadeExistente == null)
+            throw new InvalidOperationException($"Agendamento com ID {agendamento.Id} não foi encontrado.");
+
+        entidadeExistente.DataHora = agendamento.DataHora;
+        entidadeExistente.Status = agendamento.Status;
+        entidadeExistente.AlunoId = agendamento.AlunoId;
+        entidadeExistente.ProfessorId = agendamento.ProfessorId;
+        
         await _context.SaveChangesAsync();
     }
 

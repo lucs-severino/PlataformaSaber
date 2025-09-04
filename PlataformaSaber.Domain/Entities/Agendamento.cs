@@ -1,11 +1,11 @@
 public class Agendamento
 {
-    public Guid Id { get; private set; }
-    public Guid AlunoId { get; private set; }
-    public Guid ProfessorId { get; private set; }
-    public DateTime DataHora { get; private set; }
-    public DateTime DataCriacao { get; private set; }
-    public AgendamentoStatus Status { get; private set; } 
+    public Guid Id { get; set; }
+    public Guid AlunoId { get; set; }
+    public Guid ProfessorId { get;  set; }
+    public DateTime DataHora { get; set; }
+    public DateTime DataCriacao { get; set; }
+    public AgendamentoStatus Status { get;  set; } 
 
     private readonly List<AgendamentoHistorico> _historico = new();
     public IReadOnlyCollection<AgendamentoHistorico> Historico => _historico.AsReadOnly();
