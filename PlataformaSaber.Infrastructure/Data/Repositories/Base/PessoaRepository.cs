@@ -46,7 +46,6 @@ public class PessoaRepository<T> : IPessoaRepository<T> where T : Pessoa
     {
         try
         {
-            _dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)

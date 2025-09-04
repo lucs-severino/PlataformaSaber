@@ -13,8 +13,6 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IProfessorRepository,ProfessorRepository>();
         services.AddScoped<IAdministracaoRepository, AdministracaoRepository>();
         services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
-        services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
-
 
         services.AddScoped<IUserAuthentication, JwtAuthService>();
 
