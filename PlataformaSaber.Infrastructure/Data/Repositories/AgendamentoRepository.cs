@@ -24,7 +24,6 @@ public class AgendamentoRepository : IAgendamentoRepository
 
     public async Task AtualizarAsync(Agendamento agendamento)
     {
-        _context.Agendamentos.Update(agendamento);
         await _context.SaveChangesAsync();
     }
 

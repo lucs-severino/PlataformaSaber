@@ -86,7 +86,7 @@ public class AgendamentosController : BaseController
         try
         {
             var result = await _agendamentoService.ObterDadosDashboardCardsAsync();
-            return RespostaSucesso(result);
+             return Ok(result);
         }
         catch (Exception ex)
         {
@@ -118,7 +118,7 @@ public class AgendamentosController : BaseController
             {
                 return NotFound("Agendamento não encontrado.");
             }
-            return RespostaSucesso(result);
+              return Ok(result); 
         }
         catch (Exception ex)
         {

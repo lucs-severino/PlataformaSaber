@@ -110,7 +110,7 @@ public class AgendamentoService : IAgendamentoService
         }
 
         (IEnumerable<Agendamento> items, long totalCount) =
-            await _agendamentoRepository.ObterAgendamentosPaginadosAsync(page, pageSize, nome, status, data);
+            await _agendamentoRepository.ObterAgendamentosPaginadosAsync(page, pageSize, nome, statusEnum, data);
 
         var itemsDto = items.Select(a => new AgendamentoDetalheDto
         {
